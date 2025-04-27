@@ -1,3 +1,13 @@
+const express = require('express');
+const router = express.Router();
+
+// Import controller properly
+const operatorController = require('../controllers/operatorController');
+
+// Import middlewares properly
+const { authMiddleware } = require('../middleware/authMiddleware');
+const { operatorMiddleware } = require('../middleware/operatorMiddleware');
+
 /**
  * @swagger
  * tags:
@@ -21,6 +31,7 @@
  *       500:
  *         description: Server error
  */
+router.get('/trips', authMiddleware, operatorMiddleware, operatorController.getOperatorTrips);
 
 /**
  * @swagger
@@ -57,23 +68,6 @@
  *       500:
  *         description: Server error
  */
-
-
-const express = require('express');
-const router = express.Router();
-
-// Import controller properly
-const operatorController = require('../controllers/operatorController');
-
-// Import middlewares properly
-const { authMiddleware } = require('../middleware/authMiddleware');
-const { operatorMiddleware } = require('../middleware/operatorMiddleware');
-
-// View operator's own buses
-router.get('/my-buses', authMiddleware, operatorMiddleware, operatorController.getMyBuses);
-
-// View operator's own trips
-router.get('/my-trips', authMiddleware, operatorMiddleware, operatorController.getMyTrips);
+router.put('/trips/:tripId/status', authMiddleware, operatorMiddleware, operatorController.updateTripStatus);
 
 module.exports = router;
-
