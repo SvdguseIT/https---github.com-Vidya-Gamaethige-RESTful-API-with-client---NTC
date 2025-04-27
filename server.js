@@ -1,81 +1,58 @@
-require('dotenv').config(); // Load environment variables
 const express = require('express');
+const app = express();
+require('dotenv').config();
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose'); // MongoDB connection
-const cookieParser = require('cookie-parser'); // Import cookie-parser
-const http = require('http'); // Core HTTP module for integrating Socket.IO
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
-const setupSwagger = require('./config/swagger'); // Import Swagger setup
+const { authMiddleware } = require('./middleware/authMiddleware');
+const { adminMiddleware } = require('./middleware/adminMiddleware');
+const { operatorMiddleware } = require('./middleware/operatorMiddleware');
+const { commuterMiddleware } = require('./middleware/commuterMiddleware');
 
-// Import routes
+// Routes
 const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const commuterRoutes = require('./routes/commuterRoutes'); // Commuter routes
-const operatorRoutes = require('./routes/operatorRoutes'); // Operator routes
+const commuterRoutes = require('./routes/commuterRoutes');
+const operatorRoutes = require('./routes/operatorRoutes');
 
-// Create Express app
-const app = express();
+const setupSwagger = require('./config/swagger');
 
-// Middleware setup
-const commuterMiddleware = (req, res, next) => {
-    const userRole = req.cookies.role || ''; // Get user role from cookies
-    if (userRole !== 'commuter') {
-        return res.status(403).json({ message: 'Access denied. Commuter role required.' });
-    }
-    next(); // If role matches, proceed to next middleware
-};
-
-const operatorMiddleware = (req, res, next) => {
-    const userRole = req.cookies.role || ''; // Get user role from cookies
-    if (userRole !== 'operator') {
-        return res.status(403).json({ message: 'Access denied. Operator role required.' });
-    }
-    next(); // If role matches, proceed to next middleware
-};
-
-setupSwagger(app); // Enable Swagger UI at /api-docs
-
-// Middleware to parse incoming JSON requests
-app.use(bodyParser.json()); // Parses JSON request bodies
-
-// Middleware to parse incoming urlencoded request bodies
-app.use(bodyParser.urlencoded({ extended: true })); // Parses urlencoded data
-
-// Middleware to parse JSON request bodies
+// Middlewares
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-
-// Use cookie-parser middleware
 app.use(cookieParser());
+
+setupSwagger(app); // Swagger UI
 
 // MongoDB Connection
 const connectDB = async () => {
-    try {
-        // Connect to MongoDB using Mongoose
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log('Connected to MongoDB');
-    } catch (err) {
-        console.error('Error connecting to MongoDB:', err.message);
-        process.exit(1); // Exit if database connection fails
-    }
+  try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log('Connected to MongoDB');
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    process.exit(1);
+  }
 };
-
-// Call MongoDB connection
 connectDB();
 
-// Add routes
-app.use('/api/auth', authRoutes); // Authentication routes
-app.use('/api/admin', adminRoutes); // Admin routes
-app.use('/api/commuter', commuterMiddleware, commuterRoutes); // Commuter routes with middleware
-app.use('/api/operator', operatorMiddleware, operatorRoutes); // Operator routes with middleware
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
+app.use('/api/operator', authMiddleware, operatorMiddleware, operatorRoutes);
+app.use('/api/commuter', authMiddleware, commuterMiddleware, commuterRoutes);
 
-// Default route for testing
+// Root API
 app.get('/', (req, res) => {
-    res.status(200).json({ message: 'Welcome to the NTC Seat Reservation API!' });
+  res.status(200).json({ message: 'Welcome to NTC Seat Reservation API' });
 });
 
 // Start server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
-
