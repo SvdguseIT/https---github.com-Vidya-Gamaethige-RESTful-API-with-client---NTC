@@ -41,3 +41,22 @@ exports.bookSeat = async (req, res) => {
     res.status(500).json({ error: 'Server error during booking' });
   }
 };
+
+// View my bookings
+exports.getMyBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({ userId: req.user._id })
+      .populate({
+        path: 'tripId',
+        populate: {
+          path: 'routeId',
+          select: 'start end'
+        }
+      });
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    console.error('Error fetching bookings:', error.message);
+    res.status(500).json({ error: 'Server error fetching bookings' });
+  }
+};
