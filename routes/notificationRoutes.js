@@ -45,7 +45,7 @@ const notificationController = require('../controllers/notificationController');
 const { authMiddleware } = require('../middleware/authMiddleware');
 const { commuterMiddleware } = require('../middleware/commuterMiddleware');
 
-// Get my notifications
+// Get notifications
 router.get('/', authMiddleware, commuterMiddleware, notificationController.getMyNotifications);
 
 // Mark notifications as read
