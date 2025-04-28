@@ -119,7 +119,7 @@ const { commuterMiddleware } = require('../middleware/commuterMiddleware');
  *         description: Server error
  */
 
-// 🚀 Routes
+// Routes
 router.post('/book', authMiddleware, commuterMiddleware, commuterController.bookSeat);
 router.get('/bookings', authMiddleware, commuterMiddleware, commuterController.getMyBookings);
 router.post('/pay', authMiddleware, commuterMiddleware, commuterController.payBooking);
