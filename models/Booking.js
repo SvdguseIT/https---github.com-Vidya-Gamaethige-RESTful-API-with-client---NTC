@@ -1,3 +1,4 @@
+//Booking model for the bus booking system
 const mongoose = require('mongoose');
 
 const bookingSchema = new mongoose.Schema({
