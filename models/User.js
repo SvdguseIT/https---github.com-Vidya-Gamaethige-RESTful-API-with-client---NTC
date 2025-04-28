@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['admin', 'operator', 'commuter'], // Roles defined
+        enum: ['admin', 'operator', 'commuter'], 
         required: true,
     },
     tokens: [
