@@ -2,7 +2,7 @@ const Bus = require('../models/Bus');
 const Route = require('../models/Route');
 const Trip = require('../models/Trip');
 const User = require('../models/User');
-const Notification = require('../models/Notification'); // 📢 Import Notification model
+const Notification = require('../models/Notification'); // Import Notification model
 const bcrypt = require('bcryptjs');
 
 // ------------------- Bus Management -------------------
@@ -218,7 +218,7 @@ exports.cancelTrip = async (req, res) => {
     trip.status = 'cancelled';
     await trip.save();
 
-    // 🔥 Save Notification to DB
+    //  Save Notification to DB
     const notification = new Notification({
       title: 'Trip Cancelled',
       message: `Trip ${trip.tripId} has been cancelled.`,
@@ -226,7 +226,7 @@ exports.cancelTrip = async (req, res) => {
     });
     await notification.save();
 
-    // 🚀 Also emit real-time notification
+    // Also emit real-time notification
     const io = req.app.get('io');
     io.emit('new-notification', {
       type: 'trip-cancelled',
