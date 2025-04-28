@@ -1,6 +1,6 @@
 const Trip = require('../models/Trip');
 const Booking = require('../models/Booking');
-const Notification = require('../models/Notification'); // 📢 Import Notification model
+const Notification = require('../models/Notification'); // Import Notification model
 
 // ------------------- Book a Seat -------------------
 exports.bookSeat = async (req, res) => {
