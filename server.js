@@ -22,12 +22,12 @@ const io = new Server(server, {
 // Save io instance inside app for access anywhere
 app.set('io', io);
 
-// Listen for socket connections
+
 io.on('connection', (socket) => {
-  console.log('🟢 New client connected:', socket.id);
+  console.log('New client connected:', socket.id);
 
   socket.on('disconnect', () => {
-    console.log('🔴 Client disconnected:', socket.id);
+    console.log('Client disconnected:', socket.id);
   });
 });
 
@@ -53,15 +53,15 @@ const authRoutes = require('./routes/authRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const commuterRoutes = require('./routes/commuterRoutes');
 const operatorRoutes = require('./routes/operatorRoutes');
-const notificationRoutes = require('./routes/notificationRoutes'); // 📢 Add notification routes
+const notificationRoutes = require('./routes/notificationRoutes'); // Add notification routes
 
 // MongoDB Connection
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log('✅ Connected to MongoDB');
+    console.log('Connected to MongoDB');
   } catch (err) {
-    console.error('❌ MongoDB connection error:', err.message);
+    console.error('MongoDB connection error:', err.message);
     process.exit(1);
   }
 };
@@ -72,11 +72,11 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', authMiddleware, adminMiddleware, adminRoutes);
 app.use('/api/operator', authMiddleware, operatorMiddleware, operatorRoutes);
 app.use('/api/commuter', authMiddleware, commuterMiddleware, commuterRoutes);
-app.use('/api/commuter/notifications', authMiddleware, commuterMiddleware, notificationRoutes); // 📢 notification API
+app.use('/api/commuter/notifications', authMiddleware, commuterMiddleware, notificationRoutes); // notification API
 
 // Root API
 app.get('/', (req, res) => {
-  res.status(200).json({ message: 'Welcome to NTC Seat Reservation API (with Real-time 🔥)' });
+  res.status(200).json({ message: 'Welcome to NTC Seat Reservation API (with Real-time)' });
 });
 
 // Start server
