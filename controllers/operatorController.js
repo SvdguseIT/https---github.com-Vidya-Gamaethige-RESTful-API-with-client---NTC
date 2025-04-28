@@ -10,7 +10,7 @@ exports.getOperatorTrips = async (req, res) => {
     const buses = await Bus.find({ driverId: operatorId.toString() });
     const busIds = buses.map(bus => bus._id);
 
-    // Find trips assigned to these buses
+    // Find trips assigned to buses
     const trips = await Trip.find({ busId: { $in: busIds } })
       .populate('routeId', 'number start end')
       .populate('busId', 'ntcNo busNo busName');
