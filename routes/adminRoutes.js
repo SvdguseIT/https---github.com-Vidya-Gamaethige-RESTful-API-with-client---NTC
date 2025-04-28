@@ -236,7 +236,7 @@ router.get('/trips', authMiddleware, adminMiddleware, adminController.getAllTrip
 router.put('/trips/:tripId', authMiddleware, adminMiddleware, adminController.updateTrip);
 router.put('/trips/:tripId/cancel', authMiddleware, adminMiddleware, adminController.cancelTrip);
 
-// --- Operator Management Routes ---
+// --- Operator Management Routes --
 router.post('/operators', authMiddleware, adminMiddleware, adminController.addOperator);
 router.put('/operators/:id', authMiddleware, adminMiddleware, adminController.updateOperator);
 router.delete('/operators/:id', authMiddleware, adminMiddleware, adminController.deleteOperator);
