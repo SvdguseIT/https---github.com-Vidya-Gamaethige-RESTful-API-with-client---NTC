@@ -26,6 +26,8 @@ const options = {
         servers: [
             {
                 url: 'http://localhost:5000', 
+            }, {
+                url: 'https://https-github-com-vidya-gamaethige.onrender.com', 
             },
         ],
     },
