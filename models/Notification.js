@@ -1,3 +1,4 @@
+// Middleware to check if the user has admin privileges
 const mongoose = require('mongoose');
 
 const notificationSchema = new mongoose.Schema({
