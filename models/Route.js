@@ -1,4 +1,3 @@
-// File: models/Notification.js
 const mongoose = require('mongoose');
 
 const routeSchema = new mongoose.Schema({
