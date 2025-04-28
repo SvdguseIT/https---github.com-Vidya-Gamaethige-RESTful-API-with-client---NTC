@@ -11,7 +11,6 @@ exports.getMyNotifications = async (req, res) => {
   }
 };
 
-// Mark all notifications as read
 exports.markAllAsRead = async (req, res) => {
   try {
     await Notification.updateMany({ userId: req.user._id }, { $set: { isRead: true } });
