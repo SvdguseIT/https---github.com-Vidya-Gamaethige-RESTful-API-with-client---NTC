@@ -20,7 +20,7 @@ const busSchema = new mongoose.Schema({
     },
     busType: {
         type: String,
-        enum: ['AC','Semi', 'Non-AC'], // Example types
+        enum: ['AC','Semi', 'Non-AC'], 
         required: true,
     },
     busName: {
